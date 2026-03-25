@@ -62,7 +62,6 @@ class TarixiyObidaSerializer(serializers.ModelSerializer):
                 "title",
                 "description",
                 "location",
-                "date",
                 "cost",
                 "video",
                 "video_url",
@@ -180,17 +179,6 @@ class RestoranFullSerializer(RestoranSerializer):
 
 class MehmonxonaFullSerializer(MehmonxonaSerializer):
     comments = CommentSerializer(many=True, read_only=True)
-
-
-class TarixiyObidaFullSerializer(TarixiyObidaSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
-    artefaktlar = serializers.SerializerMethodField()
-
-    class Meta(TarixiyObidaSerializer.Meta):
-        pass
-
-    def get_artefaktlar(self, obj):
-        return ArtefaktSerializer(obj.artefaktlar.all(), many=True).data
 
 
 class TransportFullSerializer(TransportSerializer):
