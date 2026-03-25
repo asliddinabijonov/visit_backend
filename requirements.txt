@@ -1,0 +1,8 @@
+Django==5.2.7
+django-jazzmin==3.0.2
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+drf-yasg==1.21.14
+
+psycopg-binary==3.3.3   # PostgreSQL haydovchisi (binary varianti)
+Pillow==11.2.1          # Rasm (ImageField) bilan ishlash uchun
