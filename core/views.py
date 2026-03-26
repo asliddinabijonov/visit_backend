@@ -1,6 +1,7 @@
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
 from .models import (
@@ -44,6 +45,7 @@ class LanguageViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class XususiyatViewSet(viewsets.ModelViewSet):
@@ -59,6 +61,7 @@ class TransportTurViewSet(viewsets.ModelViewSet):
 class ViloyatViewSet(viewsets.ModelViewSet):
     queryset = Viloyat.objects.all()
     serializer_class = ViloyatSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     @action(detail=True, methods=["get"], url_path="full", serializer_class=ViloyatFullSerializer)
     def full(self, request, pk=None):
@@ -95,6 +98,7 @@ class ViloyatViewSet(viewsets.ModelViewSet):
 class TarixiyObidaViewSet(viewsets.ModelViewSet):
     queryset = TarixiyObida.objects.all()
     serializer_class = TarixiyObidaSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class OwnerManagedViewSet(viewsets.ModelViewSet):
@@ -170,6 +174,7 @@ class GidViewSet(OwnerManagedViewSet):
     serializer_class = GidSerializer
     allowed_roles = ("GUIDE",)
     single_profile = True
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class ArtefaktViewSet(viewsets.ModelViewSet):

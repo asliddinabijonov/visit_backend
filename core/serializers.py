@@ -17,16 +17,37 @@ from .models import (
 )
 
 
-class LanguageSerializer(serializers.ModelSerializer):
+class AbsoluteURLMixin:
+    def build_absolute_uri(self, value):
+        if not value:
+            return value
+        request = self.context.get("request")
+        url = getattr(value, "url", value)
+        if request:
+            return request.build_absolute_uri(url)
+        return url
+
+
+class LanguageSerializer(AbsoluteURLMixin, serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Language
         fields = "__all__"
 
+    def get_image(self, obj):
+        return self.build_absolute_uri(obj.image)
 
-class ImageSerializer(serializers.ModelSerializer):
+
+class ImageSerializer(AbsoluteURLMixin, serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Image
         fields = "__all__"
+
+    def get_image(self, obj):
+        return self.build_absolute_uri(obj.image)
 
 
 class XususiyatSerializer(serializers.ModelSerializer):
@@ -41,18 +62,31 @@ class TransportTurSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ViloyatSerializer(serializers.ModelSerializer):
+class ViloyatSerializer(AbsoluteURLMixin, serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Viloyat
         fields = "__all__"
 
+    def get_image(self, obj):
+        return self.build_absolute_uri(obj.image)
 
-class TarixiyObidaSerializer(serializers.ModelSerializer):
+
+class TarixiyObidaSerializer(AbsoluteURLMixin, serializers.ModelSerializer):
     images_detail = ImageSerializer(source="images", many=True, read_only=True)
+    video = serializers.SerializerMethodField()
+    video_poster = serializers.SerializerMethodField()
 
     class Meta:
         model = TarixiyObida
         fields = "__all__"
+
+    def get_video(self, obj):
+        return self.build_absolute_uri(obj.video)
+
+    def get_video_poster(self, obj):
+        return self.build_absolute_uri(obj.video_poster)
 
     def validate(self, attrs):
         instance = TarixiyObida(**attrs)
@@ -109,11 +143,16 @@ class TransportSerializer(serializers.ModelSerializer):
         read_only_fields = ("user",)
 
 
-class GidSerializer(serializers.ModelSerializer):
+class GidSerializer(AbsoluteURLMixin, serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Gid
         fields = "__all__"
         read_only_fields = ("user",)
+
+    def get_image(self, obj):
+        return self.build_absolute_uri(obj.image)
 
 
 class ArtefaktSerializer(serializers.ModelSerializer):
@@ -166,7 +205,11 @@ class TarixiyObidaFullSerializer(TarixiyObidaSerializer):
         pass
 
     def get_artefaktlar(self, obj):
-        return ArtefaktSerializer(obj.artefaktlar.all(), many=True).data
+        return ArtefaktSerializer(
+            obj.artefaktlar.all(),
+            many=True,
+            context=self.context,
+        ).data
 
 
 class RestoranFullSerializer(RestoranSerializer):
@@ -174,7 +217,11 @@ class RestoranFullSerializer(RestoranSerializer):
     taomlar = serializers.SerializerMethodField()
 
     def get_taomlar(self, obj):
-        return TaomSerializer(obj.taomlar.all(), many=True).data
+        return TaomSerializer(
+            obj.taomlar.all(),
+            many=True,
+            context=self.context,
+        ).data
 
 
 class MehmonxonaFullSerializer(MehmonxonaSerializer):

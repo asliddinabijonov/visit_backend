@@ -7,6 +7,12 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+api_info = openapi.Info(
+    title="Visit API",
+    default_version="v1",
+    description="API documentation",
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
@@ -16,11 +22,7 @@ urlpatterns = [
 ]
 
 schema_view = get_schema_view(
-    openapi.Info(
-        title="Visit API",
-        default_version="v1",
-        description="API documentation",
-    ),
+    api_info,
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
@@ -38,5 +40,4 @@ urlpatterns += [
     ),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
