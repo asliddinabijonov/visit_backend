@@ -1,13 +1,27 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/static/:path*",
-      "destination": "/staticfiles/:path*"
+      "src": "api/index.py",
+      "use": "@vercel/python"
     },
     {
-      "source": "/:path*",
-      "destination": "/api/index.py"
+      "src": "staticfiles/",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
+      "src": "/media/(.*)",
+      "dest": "/media/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "api/index.py"
     }
   ]
 }

@@ -11,4 +11,4 @@ pillow==11.2.1
 psycopg[binary]==3.2.10
 PyJWT==2.11.0
 whitenoise==6.9.0
-
+vercel==0.0.1
