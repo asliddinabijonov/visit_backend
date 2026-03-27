@@ -8,6 +8,7 @@ djangorestframework_simplejwt==5.5.1
 drf-yasg==1.21.14
 gunicorn==25.2.0
 pillow==11.2.1
+psycopg[binary]==3.2.10
 PyJWT==2.11.0
 whitenoise==6.9.0
 
